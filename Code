@@ -1,0 +1,53 @@
+from telegram.ext import CommandHandler
+
+from telegram import ChatAction
+
+def force_subscribe(update, context):
+
+    user_id = update.effective_user.id
+
+    context.bot.send_message(chat_id=user_id, text="Please subscribe to the following channels:")   
+
+    # Send links to the channels
+
+    link1 = "https://t.me/anotherworld_smartphone_season_2"
+
+    link2 = "https://t.me/Anime_Swordsmith"
+
+    context.bot.send_message(chat_id=user_id, text=f"{link1}\n{link2}")
+
+force_subscribe_handler = CommandHandler('force_subscribe', force_subscribe)
+
+dispatcher.add_handler(force_subscribe_handler)
+
+def check_subscription(update, context):
+
+    chat_id = update.message.chat_id
+
+    members = context.bot.get_chat_members(chat_id)
+
+    for member in members:
+
+        if member.user.id == update.message.from_user.id:
+
+            if member.status == "member":
+
+                # User has subscribed to the required channels
+
+                return True
+
+    
+
+    return False
+
+def my_handler(update, context):
+
+    if check_subscription(update, context):
+
+        # User has subscribed to the required channels context.bot.send_message(chat_id=update.message.chat_id, text="Thanks for subscribing!")
+
+    else:
+
+        # User has not subscribed to the required channels
+
+        context.bot.send_message(chat_id=update.message.chat_id, text="Please subscribe to the required channels first.")
